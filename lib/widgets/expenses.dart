@@ -1,6 +1,7 @@
 /* El objetivo de este widget es darno tres áreas principales en la pantalla 
 de inicio: Toolbar, el gráfico y la lista de de gastos. */
 
+import 'package:expense_tracker/widgets/chart/chart.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
@@ -127,7 +128,8 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          const Text('The Chart'),
+          /* VIDEO #129. Adding Chart Widgets */
+          Chart(expenses: _registeredExpenses),
           /* VIDEO #102. Using Lists Inside Of Lists
           Si tenemos combinaciones como una columna dentro de una columna o una 
           lista dentro de una lista (como en este caso) tendremos problemas con 
