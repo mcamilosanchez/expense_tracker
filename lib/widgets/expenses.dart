@@ -48,6 +48,11 @@ class _ExpensesState extends State<Expenses> {
       /* Cuando isScrollControlled se establece a TRUE, el ModalBottomSheet 
       tomará toda la altura disponible. */
       isScrollControlled: true,
+      /* VIDEO #137. Understanding "Safe Areas"
+      useSafeArea es una característica que se asegura de que nos mantengamos 
+      alejados de las características del dispositivo, como la cámara que podría
+      estar afectando nuestra UI  */
+      useSafeArea: true,
       context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );
@@ -99,6 +104,14 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(context) {
+    /* VIDEO #134. Updating the UI based on the Available Space
+    Para saber el ancho del dispositivo, hacemos lo siguiente:*/
+    final width = MediaQuery.of(context).size.width;
+    /* Obteniendo el largo del dispositivo  */
+    final height = MediaQuery.of(context).size.height;
+    /* Es importante saber que cada vez que se gira el dispositivo, el método 
+    BUILD se ejecuta de nuevo, es algo que Flutter hace por nosotros  */
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -126,21 +139,55 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          /* VIDEO #129. Adding Chart Widgets */
-          Chart(expenses: _registeredExpenses),
-          /* VIDEO #102. Using Lists Inside Of Lists
+      /* VIDEO #134. Updating the UI based on the Available Space
+      Vamos a realizar una expresión terniaria (estructura condicional que 
+      evalúa una expresión booleana) antes de Column. */
+      body: width < 600
+          ? Column(
+              children: [
+                /* VIDEO #129. Adding Chart Widgets */
+                Chart(expenses: _registeredExpenses),
+                /* VIDEO #102. Using Lists Inside Of Lists
           Si tenemos combinaciones como una columna dentro de una columna o una 
           lista dentro de una lista (como en este caso) tendremos problemas con 
           Flutter, ya que no sabe dimensionar o cómo restringir la columna 
           interior, por lo cual el CONTENIDO NO SE MOSTRARÁ. Para solucionar 
           este error hacemos un wrapp a ExpensesList por medio de EXPANDED: */
-          Expanded(
-            child: mainContent,
-          ),
-        ],
-      ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            )
+          /* Si la condición no se cumple, es decir, si el width es mayor o 
+          igual que 600, entonces la pantalla pasó de ser vertical a horizontal.
+          Por lo cual los widgets, estarán mejor ordenados si están ubicados en
+          Row. Entonces, lo único que tenemos que hacer es copiar y pegar en 
+          children : */
+          : Row(
+              /* VIDEO #134. Updating the UI based on the Available Space
+              Al momento de volver horizontal el dispositivo, tenemos un 
+              inconveniente. Ya que si tenemos un children que intenta conseguir
+              todo el ancho (en este caso, Chart) y tenemos un padre que intenta
+              conseguir lo mismo (ya que lo vamos a volver horizontal) obtenemos
+              un ERROR en la UI. Para evitarlo, hacemos otro Expanded dentro del
+              hijo Chart. Esta es SIEMPRE LA SOLUCION CUANDO TENEMOS WIDGETS 
+              ANIDADOS QUE NO FUNCIONEN JUNTOS*/
+              /* 135. Understanding Size Constraints
+              En resumen, se debe tener cuidado cuando usamos widgets anidados 
+              debido a las restricciones de su altura y ancho. Ya que la altura 
+              máxima que alcance el hijo, será la altura máxima que alcance el 
+              padre y éste, debe estar restringido para que así no se salga de 
+              la pantalla. Una solución es usar EXPANDED, ya que establece la 
+              altura o anchura máxima qie hijos realmente puedan ocupar*/
+              children: [
+                Expanded(
+                  child: Chart(expenses: _registeredExpenses),
+                ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            ),
     );
   }
 }

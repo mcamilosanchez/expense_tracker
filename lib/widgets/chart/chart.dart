@@ -39,6 +39,10 @@ class Chart extends StatelessWidget {
         vertical: 16,
         horizontal: 8,
       ),
+      /* VIDEO #134. Updating the UI based on the Available Space
+      Al momento de volver horizontal el dispositivo, tenemos un inconveniente 
+      con la siguiente línea de código, está diciendo que el Container trata de 
+      tomar todo el ancho que puede conseguir*/
       width: double.infinity,
       height: 180,
       decoration: BoxDecoration(
