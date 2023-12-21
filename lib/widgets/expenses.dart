@@ -108,7 +108,7 @@ class _ExpensesState extends State<Expenses> {
     Para saber el ancho del dispositivo, hacemos lo siguiente:*/
     final width = MediaQuery.of(context).size.width;
     /* Obteniendo el largo del dispositivo  */
-    final height = MediaQuery.of(context).size.height;
+    //final height = MediaQuery.of(context).size.height;
     /* Es importante saber que cada vez que se gira el dispositivo, el método 
     BUILD se ejecuta de nuevo, es algo que Flutter hace por nosotros  */
 
